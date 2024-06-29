@@ -16,6 +16,14 @@ class HMC5883L:
         '5.6':  (6 << 5, 3.03),
         '8.1':  (7 << 5, 4.35)
     }
+     
+     
+     # Correction to be set after calibration
+    xs=1
+    ys=1
+    xb=0
+    yb=0
+
 
     def __init__(self,i2c, address=30, gauss='1.3', declination=(0, 0)):
         self.i2c = i2c 
@@ -60,6 +68,10 @@ class HMC5883L:
         x = round(x * gain, 4)
         y = round(y * gain, 4)
         z = round(z * gain, 4)
+        
+         # Apply calibration corrections
+        x = x * self.xs + self.xb
+        y = y * self.ys + self.yb
 
         return x, y, z
 
